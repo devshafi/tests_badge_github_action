@@ -1,4 +1,4 @@
-name: Tests and Coverage
+name: Tests
 
 on:
   push:
@@ -25,27 +25,9 @@ jobs:
     
     - name: Run tests with coverage
       run: |
-        pytest --cov=. --cov-report=xml --cov-report=html tests/
+        pytest --cov=. --cov-report=xml tests/
     
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-
-    - name: Generate coverage badge
-      run: |
-        coverage-badge -o coverage.svg
-      continue-on-error: true
-    
-    - name: Archive coverage results
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: |
-          coverage.xml
-          htmlcov/
-          coverage.svg
-      if: always()
+        token: ${{ secrets.CODECOV_TOKEN }}
